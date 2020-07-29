@@ -1,9 +1,15 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlwebpackPlugin = require('html-webpack-plugin')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
 module.exports = {
     mode: 'development',
     entry: './src/main.js',
+    devServer: {
+        contentBase: './dist',
+        open:true,
+    },
     output:{
         filename:'bundle.js',
         path: path.resolve(__dirname, 'dist')
@@ -25,11 +31,19 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.styl(us)?$/,
+                use: ['style-loader', 'css-loader', 'postcss-loader','stylus-loader']
             }
         ]
     },
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new HtmlwebpackPlugin({
+            template: './index.html'
+        }),
+        new CleanWebpackPlugin()
     ],
     resolve:{
         alias: {
